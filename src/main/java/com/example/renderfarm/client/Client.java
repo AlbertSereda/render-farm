@@ -9,6 +9,7 @@ public class Client {
     private static final String HOST = "localhost";
 
     public static void main(String[] args) {
+        Client client = new Client();
         try (Socket socket = new Socket(HOST, PORT);
              BufferedReader br = new BufferedReader(
                      new InputStreamReader(socket.getInputStream()));
@@ -17,25 +18,36 @@ public class Client {
              Scanner scanner = new Scanner(System.in)) {
 
             while (true) {
-                String readString = br.readLine().replaceAll("\\D", "");
-                int countLine = Integer.parseInt(readString);
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < countLine; i++) {
-                    sb.append(br.readLine()).append('\n');
-                }
-                System.out.println(sb);
-                if (sb.toString().startsWith("exit")) {
+                String message = client.readMessage(br);
+                System.out.println(message);
+                if (message.startsWith("exit")) {
                     break;
                 } else {
                     String clientMessage = scanner.nextLine();
-                    bw.write(clientMessage);
-                    bw.write('\n');
-                    bw.flush();
+                    client.writeMessage(bw, clientMessage);
                 }
             }
-
         } catch (IOException e) {
             System.out.println("Server connection error");
         }
+    }
+
+    public String readMessage(BufferedReader br) throws IOException {
+        String readString = br.readLine().replaceAll("\\D", "");
+        int countLine = Integer.parseInt(readString);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < countLine; i++) {
+            sb.append(br.readLine());
+            if (i < countLine - 1) {
+                sb.append('\n');
+            }
+        }
+        return sb.toString();
+    }
+
+    public void writeMessage(BufferedWriter bw, String clientMessage) throws IOException {
+        bw.write(clientMessage);
+        bw.write('\n');
+        bw.flush();
     }
 }
