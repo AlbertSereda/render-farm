@@ -7,4 +7,6 @@ public interface Command {
     String execute(ClientSocket clientSocket, String[] clientMessage);
 
     String helpMessage();
+
+    String getNameCommand();
 }

@@ -7,14 +7,19 @@ import com.example.renderfarm.server.command.CommandException.NotAuthorizedClien
 import com.example.renderfarm.server.entity.Client;
 import com.example.renderfarm.server.entity.Task;
 import com.example.renderfarm.server.service.TaskService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.text.DecimalFormat;
 
+@CommandAnnotation
+@Component
 public class CreateTaskCommand implements Command {
     private final TaskService taskService;
     private final ClientTaskExecutor taskExecutor;
 
-    public CreateTaskCommand(TaskService taskService, ClientTaskExecutor taskExecutor) {
+    public CreateTaskCommand(@Autowired TaskService taskService,
+                             @Autowired ClientTaskExecutor taskExecutor) {
         this.taskService = taskService;
         this.taskExecutor = taskExecutor;
     }
@@ -49,5 +54,10 @@ public class CreateTaskCommand implements Command {
     @Override
     public String helpMessage() {
         return "createTask <nameTask>\t :Create a task";
+    }
+
+    @Override
+    public String getNameCommand() {
+        return "createtask";
     }
 }

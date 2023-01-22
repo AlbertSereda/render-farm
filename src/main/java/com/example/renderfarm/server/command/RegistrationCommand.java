@@ -6,12 +6,16 @@ import com.example.renderfarm.server.command.CommandException.LoginAlreadyExists
 import com.example.renderfarm.server.command.CommandException.NotPasswordMatchException;
 import com.example.renderfarm.server.entity.Client;
 import com.example.renderfarm.server.service.ClientService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@CommandAnnotation
+@Component
 public class RegistrationCommand implements Command {
 
     private final ClientService clientService;
 
-    public RegistrationCommand(ClientService clientService) {
+    public RegistrationCommand(@Autowired ClientService clientService) {
         this.clientService = clientService;
     }
 
@@ -36,5 +40,10 @@ public class RegistrationCommand implements Command {
     @Override
     public String helpMessage() {
         return "reg <login> <password> <confirm password>\t :Register an account";
+    }
+
+    @Override
+    public String getNameCommand() {
+        return "reg";
     }
 }

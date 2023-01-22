@@ -6,14 +6,18 @@ import com.example.renderfarm.server.command.CommandException.NotAuthorizedClien
 import com.example.renderfarm.server.entity.Client;
 import com.example.renderfarm.server.entity.Task;
 import com.example.renderfarm.server.service.TaskService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@CommandAnnotation
+@Component
 public class ListTasksCommand implements Command {
     private final TaskService taskService;
 
-    public ListTasksCommand(TaskService taskService) {
+    public ListTasksCommand(@Autowired TaskService taskService) {
         this.taskService = taskService;
     }
 
@@ -93,5 +97,10 @@ public class ListTasksCommand implements Command {
                 "listTasks -n <NameTask>\t :Display a list of tasks with filtering by task name\n" +
                 "listTasks -i <IdTask>\t :Display a list of tasks with filtering by task ID\n" +
                 "listTasks -s <StatusTask>\t :Display a list of tasks with filtering by task status";
+    }
+
+    @Override
+    public String getNameCommand() {
+        return "listtasks";
     }
 }

@@ -2,9 +2,12 @@ package com.example.renderfarm.server.command;
 
 import com.example.renderfarm.server.ClientSocket;
 import com.example.renderfarm.server.command.CommandException.IncorrectCommandException;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+@CommandAnnotation
+@Component
 public class HelpCommand implements Command {
 
     private final Map<String, Command> commands;
@@ -29,6 +32,11 @@ public class HelpCommand implements Command {
     @Override
     public String helpMessage() {
         return "help\t :Show the list of commands";
+    }
+
+    @Override
+    public String getNameCommand() {
+        return "help";
     }
 
     private String fillHelpMessage() {

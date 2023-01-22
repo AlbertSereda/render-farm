@@ -6,12 +6,16 @@ import com.example.renderfarm.server.command.CommandException.IncorrectCommandEx
 import com.example.renderfarm.server.command.CommandException.InvalidLoginPasswordException;
 import com.example.renderfarm.server.entity.Client;
 import com.example.renderfarm.server.service.ClientService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@CommandAnnotation
+@Component
 public class LogInCommand implements Command {
 
     private final ClientService clientService;
 
-    public LogInCommand(ClientService clientService) {
+    public LogInCommand(@Autowired ClientService clientService) {
         this.clientService = clientService;
     }
 
@@ -39,5 +43,10 @@ public class LogInCommand implements Command {
     @Override
     public String helpMessage() {
         return "login <login> <password>\t :Log in to your account";
+    }
+
+    @Override
+    public String getNameCommand() {
+        return "login";
     }
 }

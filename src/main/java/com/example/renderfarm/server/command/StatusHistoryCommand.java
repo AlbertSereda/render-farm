@@ -6,14 +6,18 @@ import com.example.renderfarm.server.command.CommandException.NotAuthorizedClien
 import com.example.renderfarm.server.entity.Client;
 import com.example.renderfarm.server.entity.StatusHistory;
 import com.example.renderfarm.server.service.StatusHistoryService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@CommandAnnotation
+@Component
 public class StatusHistoryCommand implements Command {
 
     private final StatusHistoryService statusHistoryService;
 
-    public StatusHistoryCommand(StatusHistoryService statusHistoryService) {
+    public StatusHistoryCommand(@Autowired StatusHistoryService statusHistoryService) {
         this.statusHistoryService = statusHistoryService;
     }
 
@@ -51,5 +55,10 @@ public class StatusHistoryCommand implements Command {
     @Override
     public String helpMessage() {
         return "statusHistory\t :Show the history of changing task statuses";
+    }
+
+    @Override
+    public String getNameCommand() {
+        return "statushistory";
     }
 }
