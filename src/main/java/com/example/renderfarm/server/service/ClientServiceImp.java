@@ -9,8 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ClientServiceImp implements ClientService {
 
-    @Autowired
-    private ClientRepository clientRepository;
+    private final ClientRepository clientRepository;
+
+    public ClientServiceImp(@Autowired ClientRepository clientRepository) {
+        this.clientRepository = clientRepository;
+    }
 
     @Override
     @Transactional

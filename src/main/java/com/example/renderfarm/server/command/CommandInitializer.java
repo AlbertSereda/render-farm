@@ -13,17 +13,23 @@ import java.util.Map;
 @Component
 public class CommandInitializer {
 
-    @Autowired
-    private ClientTaskExecutor taskExecutor;
+    private final ClientTaskExecutor taskExecutor;
 
-    @Autowired
-    private ClientService clientService;
+    private final ClientService clientService;
 
-    @Autowired
-    private TaskService taskService;
+    private final TaskService taskService;
 
-    @Autowired
-    private StatusHistoryService statusHistoryService;
+    private final StatusHistoryService statusHistoryService;
+
+    public CommandInitializer(@Autowired ClientTaskExecutor taskExecutor,
+                              @Autowired ClientService clientService,
+                              @Autowired TaskService taskService,
+                              @Autowired StatusHistoryService statusHistoryService) {
+        this.taskExecutor = taskExecutor;
+        this.clientService = clientService;
+        this.taskService = taskService;
+        this.statusHistoryService = statusHistoryService;
+    }
 
     public Map<String, Command> init() {
         Map<String, Command> commands = new HashMap<>();

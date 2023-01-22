@@ -12,10 +12,10 @@ import java.util.concurrent.Executors;
 public class ClientTaskExecutor {
     private final ExecutorService executorService;
 
-    @Autowired
-    private TaskService taskService;
+    private final TaskService taskService;
 
-    public ClientTaskExecutor() {
+    public ClientTaskExecutor(@Autowired TaskService taskService) {
+        this.taskService = taskService;
         executorService = Executors.newCachedThreadPool();
     }
 

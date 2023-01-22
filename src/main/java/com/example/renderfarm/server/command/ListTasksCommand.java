@@ -40,7 +40,6 @@ public class ListTasksCommand implements Command {
                         nameTask.append(clientMessage[i]);
                         if (i != clientMessage.length - 1) nameTask.append(" ");
                     }
-                    System.out.println(nameTask);
                     tasks = taskService.findAllByClientAndNameIgnoreCase(client, nameTask.toString());
                     break;
                 case "-i":

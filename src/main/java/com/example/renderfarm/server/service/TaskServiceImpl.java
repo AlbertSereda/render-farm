@@ -14,11 +14,14 @@ import java.util.List;
 @Service
 public class TaskServiceImpl implements TaskService {
 
-    @Autowired
-    private TaskRepository taskRepository;
+    private final TaskRepository taskRepository;
 
-    @Autowired
-    private StatusHistoryRepository statusHistoryRepository;
+    private final StatusHistoryRepository statusHistoryRepository;
+
+    public TaskServiceImpl(@Autowired TaskRepository taskRepository, @Autowired StatusHistoryRepository statusHistoryRepository) {
+        this.taskRepository = taskRepository;
+        this.statusHistoryRepository = statusHistoryRepository;
+    }
 
     @Override
     @Transactional

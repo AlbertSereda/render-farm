@@ -18,14 +18,14 @@ public class Server implements Runnable {
 
     private static final int PORT = 8080;
 
-    private Map<SocketChannel, ClientSocket> socketChannelMap;
+    private final Map<SocketChannel, ClientSocket> socketChannelMap;
 
-    @Autowired
-    private ServerLogicExecutor serverLogicExecutor;
+    private final ServerLogicExecutor serverLogicExecutor;
 
-    public Server() {
+    public Server(@Autowired ServerLogicExecutor serverLogicExecutor) {
         isActive = true;
         socketChannelMap = new ConcurrentHashMap<>();
+        this.serverLogicExecutor = serverLogicExecutor;
         new Thread(this).start();
     }
 

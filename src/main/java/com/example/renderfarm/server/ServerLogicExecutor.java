@@ -17,14 +17,13 @@ public class ServerLogicExecutor {
     private static final Logger log = Logger.getLogger(ServerLogicExecutor.class.getName());
     private static final int COUNT_THREAD = 1;
     private final ExecutorService executorService;
-
-    @Autowired
-    private MessageConverter messageConverter;
+    private final MessageConverter messageConverter;
     private final Map<String, Command> commands;
 
-    public ServerLogicExecutor(@Autowired CommandInitializer commandInitializer) {
+    public ServerLogicExecutor(@Autowired CommandInitializer commandInitializer, @Autowired MessageConverter messageConverter) {
         executorService = Executors.newFixedThreadPool(COUNT_THREAD);
         commands = commandInitializer.init();
+        this.messageConverter = messageConverter;
         log.info("ServerLogicExecutor is started");
     }
 

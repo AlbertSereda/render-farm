@@ -12,8 +12,11 @@ import java.util.List;
 @Service
 public class StatusHistoryServiceImpl implements StatusHistoryService {
 
-    @Autowired
-    private StatusHistoryRepository statusHistoryRepository;
+    private final StatusHistoryRepository statusHistoryRepository;
+
+    public StatusHistoryServiceImpl(@Autowired StatusHistoryRepository statusHistoryRepository) {
+        this.statusHistoryRepository = statusHistoryRepository;
+    }
 
     @Override
     @Transactional
