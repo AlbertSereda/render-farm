@@ -10,7 +10,7 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
 
     List<Task> findAllByClient(Client client);
 
-    List<Task> findAllByClientAndName(Client client, String name);
+    List<Task> findAllByClientAndNameIgnoreCase(Client client, String name);
 
     List<Task> findAllByClientAndId(Client client, int id);
 

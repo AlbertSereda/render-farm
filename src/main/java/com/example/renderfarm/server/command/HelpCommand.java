@@ -1,6 +1,7 @@
 package com.example.renderfarm.server.command;
 
 import com.example.renderfarm.server.ClientSocket;
+import com.example.renderfarm.server.command.CommandException.IncorrectCommandException;
 
 import java.util.Map;
 
@@ -18,6 +19,9 @@ public class HelpCommand implements Command {
     public String execute(ClientSocket clientSocket, String[] clientMessage) {
         if (helpMessage == null) {
             helpMessage = fillHelpMessage();
+        }
+        if (clientMessage.length != 1) {
+            throw new IncorrectCommandException();
         }
         return helpMessage;
     }

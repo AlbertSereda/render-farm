@@ -1,6 +1,7 @@
 package com.example.renderfarm.server;
 
 import com.example.renderfarm.server.command.Command;
+import com.example.renderfarm.server.command.CommandException.*;
 import com.example.renderfarm.server.command.CommandInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -40,11 +41,25 @@ public class ServerLogicExecutor {
             String[] splitMessage = clientMessage.trim().replaceAll(" +", " ").split(" ");
             String message = "";
             if (splitMessage.length >= 1) {
-                if (commands.get(splitMessage[0].toLowerCase()) == null) {
+                Command command = commands.get(splitMessage[0].toLowerCase());
+                if (command == null) {
                     message = "Incorrect command. Enter the \"help\" command to display a list of commands";
                 } else {
-                    Command command = commands.get(splitMessage[0].toLowerCase());
-                    message = command.execute(clientSocket, splitMessage);
+                    try {
+                        message = command.execute(clientSocket, splitMessage);
+                    } catch (IncorrectCommandException e) {
+                        message = "Incorrect command. " + e.getMessage();
+                    } catch (NotAuthorizedClientException e) {
+                        message = "You must log in to execute this command";
+                    } catch (ClientAlreadyLoggedException e) {
+                        message = "You are already logged in";
+                    } catch (InvalidLoginPasswordException e) {
+                        message = "Invalid Login or Password";
+                    } catch (NotPasswordMatchException e) {
+                        message = "Passwords don't match";
+                    } catch (LoginAlreadyExistsException e) {
+                        message = "User with such login already exists";
+                    }
                 }
             }
             String response = messageConverter.convertMessageForClient(message);

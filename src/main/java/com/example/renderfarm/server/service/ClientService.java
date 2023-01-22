@@ -4,9 +4,9 @@ import com.example.renderfarm.server.entity.Client;
 
 public interface ClientService {
 
-    Client findClientByLogin(String login);
+    Client findClientByLoginIgnoreCase(String login);
 
     Client saveClient(Client client);
 
-    Client findByLogin(String s);
+    Client findByLoginIgnoreCase(String s);
 }

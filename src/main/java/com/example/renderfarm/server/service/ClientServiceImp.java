@@ -14,8 +14,8 @@ public class ClientServiceImp implements ClientService {
 
     @Override
     @Transactional
-    public Client findClientByLogin(String login) {
-        return clientRepository.findByLogin(login);
+    public Client findClientByLoginIgnoreCase(String login) {
+        return clientRepository.findByLoginIgnoreCase(login);
     }
 
     @Override
@@ -26,7 +26,7 @@ public class ClientServiceImp implements ClientService {
 
     @Override
     @Transactional
-    public Client findByLogin(String login) {
-        return clientRepository.findByLogin(login);
+    public Client findByLoginIgnoreCase(String login) {
+        return clientRepository.findByLoginIgnoreCase(login);
     }
 }

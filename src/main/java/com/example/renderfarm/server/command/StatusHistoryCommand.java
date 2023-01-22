@@ -1,6 +1,8 @@
 package com.example.renderfarm.server.command;
 
 import com.example.renderfarm.server.ClientSocket;
+import com.example.renderfarm.server.command.CommandException.IncorrectCommandException;
+import com.example.renderfarm.server.command.CommandException.NotAuthorizedClientException;
 import com.example.renderfarm.server.entity.Client;
 import com.example.renderfarm.server.entity.StatusHistory;
 import com.example.renderfarm.server.service.StatusHistoryService;
@@ -17,20 +19,16 @@ public class StatusHistoryCommand implements Command {
 
     @Override
     public String execute(ClientSocket clientSocket, String[] clientMessage) {
-        if (clientMessage.length != 1 && clientMessage.length != 3) {
-            return "Incorrect command";
+        if (clientMessage.length != 1) {
+            throw new IncorrectCommandException();
         }
 
         if (!clientSocket.isAuthorized()) {
-            return "You must log in to execute this command";
+            throw new NotAuthorizedClientException();
         }
 
         Client client = clientSocket.getClient();
         List<StatusHistory> statusHistories;
-
-        if (clientMessage.length != 1) {
-            return "Incorrect command";
-        }
         statusHistories = statusHistoryService.findAllByClient(client);
         return getStringFromList(statusHistories);
     }

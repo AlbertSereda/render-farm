@@ -1,6 +1,9 @@
 package com.example.renderfarm.server.command;
 
 import com.example.renderfarm.server.ClientSocket;
+import com.example.renderfarm.server.command.CommandException.ClientAlreadyLoggedException;
+import com.example.renderfarm.server.command.CommandException.IncorrectCommandException;
+import com.example.renderfarm.server.command.CommandException.InvalidLoginPasswordException;
 import com.example.renderfarm.server.entity.Client;
 import com.example.renderfarm.server.service.ClientService;
 
@@ -15,17 +18,17 @@ public class LogInCommand implements Command {
     @Override
     public String execute(ClientSocket clientSocket, String[] clientMessage) {
         if (clientMessage.length != 3) {
-            return "Incorrect command";
+            throw new IncorrectCommandException();
         }
 
         if (clientSocket.isAuthorized()) {
-            return "You are already logged in";
+            throw new ClientAlreadyLoggedException();
         }
 
-        Client client = clientService.findByLogin(clientMessage[1]);
+        Client client = clientService.findByLoginIgnoreCase(clientMessage[1]);
 
         if (client == null || !client.getPassword().equals(clientMessage[2])) {
-            return "Invalid Login or Password";
+            throw new InvalidLoginPasswordException();
         }
 
         clientSocket.setAuthorized(true);

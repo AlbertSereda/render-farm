@@ -1,6 +1,8 @@
 package com.example.renderfarm.server.command;
 
 import com.example.renderfarm.server.ClientSocket;
+import com.example.renderfarm.server.command.CommandException.IncorrectCommandException;
+import com.example.renderfarm.server.command.CommandException.NotAuthorizedClientException;
 import com.example.renderfarm.server.entity.Client;
 import com.example.renderfarm.server.entity.Task;
 import com.example.renderfarm.server.service.TaskService;
@@ -17,12 +19,12 @@ public class ListTasksCommand implements Command {
 
     @Override
     public String execute(ClientSocket clientSocket, String[] clientMessage) {
-        if (clientMessage.length != 1 && clientMessage.length != 3) {
-            return "Incorrect command";
+        if (clientMessage.length == 2) {
+            throw new IncorrectCommandException();
         }
 
         if (!clientSocket.isAuthorized()) {
-            return "You must log in to execute this command";
+            throw new NotAuthorizedClientException();
         }
 
         Client client = clientSocket.getClient();
@@ -33,18 +35,29 @@ public class ListTasksCommand implements Command {
         } else {
             switch (clientMessage[1].toLowerCase()) {
                 case "-n":
-                    String name = clientMessage[2];
-                    tasks = taskService.findAllByClientAndName(client, name);
+                    StringBuilder nameTask = new StringBuilder();
+                    for (int i = 2; i < clientMessage.length; i++) {
+                        nameTask.append(clientMessage[i]);
+                        if (i != clientMessage.length - 1) nameTask.append(" ");
+                    }
+                    System.out.println(nameTask);
+                    tasks = taskService.findAllByClientAndNameIgnoreCase(client, nameTask.toString());
                     break;
                 case "-i":
                     try {
+                        if (clientMessage.length > 3) {
+                            throw new IncorrectCommandException();
+                        }
                         int id = Integer.parseInt(clientMessage[2]);
                         tasks = taskService.findAllByClientAndId(client, id);
                     } catch (NumberFormatException e) {
-                        return "Incorrect Id";
+                        throw new IncorrectCommandException("Incorrect Id");
                     }
                     break;
                 case "-s":
+                    if (clientMessage.length > 3) {
+                        throw new IncorrectCommandException();
+                    }
                     String status = clientMessage[2];
                     Task.Status[] statuses = Task.Status.values();
                     for (int i = 0; i < statuses.length; i++) {
@@ -52,11 +65,11 @@ public class ListTasksCommand implements Command {
                             tasks = taskService.findAllByClientAndStatus(client, statuses[i]);
                             break;
                         }
-                        if (i == statuses.length - 1) return "Incorrect Status";
+                        if (i == statuses.length - 1) throw new IncorrectCommandException("Incorrect Status");
                     }
                     break;
                 default:
-                    return "Incorrect parameter";
+                    throw new IncorrectCommandException("Incorrect parameter");
             }
         }
         return getStringFromList(tasks);

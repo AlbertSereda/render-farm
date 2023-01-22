@@ -28,8 +28,8 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public List<Task> findAllByClientAndName(Client client, String name) {
-        return taskRepository.findAllByClientAndName(client, name);
+    public List<Task> findAllByClientAndNameIgnoreCase(Client client, String name) {
+        return taskRepository.findAllByClientAndNameIgnoreCase(client, name);
     }
 
     @Override
